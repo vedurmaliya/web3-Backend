@@ -14,12 +14,16 @@ contract Auction is ERC721, Ownable {
     }
 
     mapping(uint256 => NFT) public nfts;
+    uint256 public totalNFTs; // Track the total number of NFTs created
 
     constructor(string memory name, string memory symbol) ERC721(name, symbol) {
+        totalNFTs = 0; // Initialize totalNFTs
     }
 
-    function createNFT(uint256 tokenId, string memory name, string memory description) external onlyOwner {
+    function createNFT(string memory name, string memory description) external onlyOwner {
+        uint256 tokenId = totalNFTs; // Use totalNFTs as the new tokenId
         nfts[tokenId] = NFT({ tokenId: tokenId, name: name, description: description, highestBidder: address(0), highestBid: 0 });
+        totalNFTs++; // Increment totalNFTs for the next NFT
     }
 
     function placeBid(uint256 tokenId) external payable {
